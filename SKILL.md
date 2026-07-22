@@ -17,10 +17,15 @@ metadata:
 
 当用户发送本 raw `SKILL.md` 链接，或明确说“安装、启用、更新科研辅助能力包（Skill）”等同类意思时，必须视为明确授权的安装或更新请求；不要让用户在技术路径之间做选择。
 
-如果当前运行在 Hermes / 节点引擎环境且具备终端能力，使用一次受控安装调用：
+如果当前运行在 Hermes / 节点引擎环境且具备终端能力，使用一次受控调用：已安装则更新，未安装则从官方 raw 链接安装。
 
 ```bash
-hermes skills install https://raw.githubusercontent.com/xyxw1234-bot/research-assistance-skill/main/SKILL.md --yes --category research
+SKILL_FILE="${HERMES_HOME:-$HOME/.hermes}/skills/research/research-assistance-skill/SKILL.md"
+if [ -f "$SKILL_FILE" ]; then
+  hermes skills update research-assistance-skill
+else
+  hermes skills install https://raw.githubusercontent.com/xyxw1234-bot/research-assistance-skill/main/SKILL.md --yes --category research
+fi
 ```
 
 安装或更新成功后，立刻发送本 Skill 规定的完整欢迎文案；不要向普通用户展示安装命令、内部路径、日志、版本检查或调试信息。若当前环境不能完成安装，不得伪称已启用。
